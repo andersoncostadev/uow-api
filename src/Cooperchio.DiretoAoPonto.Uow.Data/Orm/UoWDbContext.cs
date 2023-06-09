@@ -5,9 +5,7 @@ namespace Cooperchio.DiretoAoPonto.Uow.Data.Orm
 {
     public class UoWDbContext : DbContext
     {
-        public UoWDbContext(DbContextOptions<UoWDbContext> options) : base(options)
-        {
-        }
+        public UoWDbContext(DbContextOptions<UoWDbContext> options) : base(options){}
 
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Flight> Flights { get; set; }

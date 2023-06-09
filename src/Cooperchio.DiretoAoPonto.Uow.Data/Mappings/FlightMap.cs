@@ -18,7 +18,7 @@ namespace Cooperchip.DiretoAoPonto.Uow.Data.Mappings
             builder.Property(f => f.RoadMap)
                 .IsRequired()
                 .HasMaxLength (100)
-                .HasColumnType("varchar(100)");
+                .HasColumnType("varchar");
 
            
             builder.HasMany(f => f.Passengers)

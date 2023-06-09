@@ -1,4 +1,8 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Cooperchio.DiretoAoPonto.Uow.Data.Orm;
+using Cooperchip.DiretoaoPonto.UoW.Api.Mapper;
+using Cooperchip.DiretoAoPonto.Uow.Data.FailedRepository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api
 {
@@ -13,6 +17,17 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(AutoMapperConfig));
+            services.AddScoped<IPassengerFailedRepository, PassengerFailedRepository>();
+            services.AddScoped<IFlightFailedRepository, FlightFailedRepository>();
+
+            var connection = Configuration["MySQlConnection:MySQlConnectionString"];
+
+            services.AddDbContext<UoWDbContext>(options => options.
+                UseMySql(connection,
+                        new MySqlServerVersion(
+                            new Version(8, 0, 5))));
+
             services.AddControllers();
 
                 services.AddSwaggerGen(c =>
