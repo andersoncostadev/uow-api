@@ -19,7 +19,7 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Configuration.Extensions
             //V2 Approach
             services.AddScoped<IPassagenrV2Repository, PassagenrV2Repository>();
             services.AddScoped<IFlightV2Repository, FlightV2Repository>();
-            services.AddScoped<IUoW, Uow>();
+            services.AddScoped<IUnitOfWorkV2, UnitOfWork>();
 
             return services;
         }
