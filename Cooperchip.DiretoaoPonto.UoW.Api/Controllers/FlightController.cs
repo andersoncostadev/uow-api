@@ -8,8 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
 {
-    [Route("api/flight")]
     [ApiController]
+    [ApiVersion("1.0", Deprecated = true)]
+    [Route("api/v{version:apiVersion}/flight")]
     public class FlightController : Controller
     {
         private readonly FlightSettings _settings;

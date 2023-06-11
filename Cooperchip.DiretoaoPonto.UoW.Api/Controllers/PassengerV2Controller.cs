@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
 {
-    [Route("api/passenger-v2")]
     [ApiController]
-    public class PassengerV2Controller : Controller
+    [ApiVersion("1.0", Deprecated = true)]
+    [Route("api/v{version:apiVersion}/passenger-V2")]
+    public class PassengerV2Controller : ControllerBase
     {
         private readonly IUnitOfWorkV2 _uow;
         private readonly IPassagenrRepository _repoPassagenr;

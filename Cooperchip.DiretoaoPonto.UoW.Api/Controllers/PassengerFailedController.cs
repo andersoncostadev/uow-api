@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
 {
-    [Route("api/passengerfailed")]
     [ApiController]
+    [ApiVersion("1.0", Deprecated = true)]
+    [Route("api/v{version:apiVersion}/passenger-failed")]
     public class PassengerFailedController : Controller
     {
         private readonly IPassengerFailedRepository _repoPassagenr;
