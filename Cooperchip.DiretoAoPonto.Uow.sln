@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cooperchip.DiretoAoPonto.Uo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cooperchip.DiretoAoPonto.Uow.Domain", "src\Cooperchip.DiretoAoPonto.Uow\Cooperchip.DiretoAoPonto.Uow.Domain.csproj", "{D17825C1-AF07-4861-AC6D-561DE75315B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cooperchip.DiretoaoPonto.UoW.Api", "Cooperchip.DiretoaoPonto.UoW.Api\Cooperchip.DiretoaoPonto.UoW.Api.csproj", "{1963AF7A-3161-4EFE-9B5D-4288E7F6D02E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cooperchip.DiretoaoPonto.UoW.Api", "Cooperchip.DiretoaoPonto.UoW.Api\Cooperchip.DiretoaoPonto.UoW.Api.csproj", "{1963AF7A-3161-4EFE-9B5D-4288E7F6D02E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

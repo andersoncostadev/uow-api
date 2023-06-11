@@ -9,6 +9,7 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Mapper
         public AutoMapperConfig()
         {
             CreateMap<Passenger, PassengerDTO>().ReverseMap();
+            CreateMap<Flight, FlightDTO>().ReverseMap();
         }
     }
 }

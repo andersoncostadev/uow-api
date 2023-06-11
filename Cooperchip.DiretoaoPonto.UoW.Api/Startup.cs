@@ -1,7 +1,11 @@
 ﻿using Cooperchio.DiretoAoPonto.Uow.Data.Orm;
+using Cooperchip.DiretoaoPonto.UoW.Api.Configuration.Settings;
 using Cooperchip.DiretoaoPonto.UoW.Api.Mapper;
 using Cooperchip.DiretoAoPonto.Uow.Data.FailedRepository;
+using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Abstraction;
+using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Implemetation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api
@@ -18,8 +22,12 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperConfig));
+
             services.AddScoped<IPassengerFailedRepository, PassengerFailedRepository>();
             services.AddScoped<IFlightFailedRepository, FlightFailedRepository>();
+
+            services.AddScoped<IPassagenrRepository, PassengerRepository>();
+            services.AddScoped<IFlightRepository, FlightRepository>();
 
             var connection = Configuration["MySQlConnection:MySQlConnectionString"];
 
@@ -33,30 +41,10 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api
                 services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cooperchip.DiretoaoPonto.UoW.Api - API", Version = "v1" });
-                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        Description = @"Enter 'Bearer' [space] and your token!",
-                        Name = "Authorization",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.ApiKey,
-                        Scheme = "Bearer"
-                    });
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        },
-                        Scheme ="oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header
-                    },
-                    new List<string>()
-                }}); ;
                 });
+
+            services.Configure<FlightSettings>(Configuration.GetSection(FlightSettings.SessionName));
+            services.AddSingleton(s => s.GetRequiredService<IOptions<FlightSettings>>().Value);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) 
