@@ -32,7 +32,6 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api
                 app.UseSwaggerConfiguration();
             }
 
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
