@@ -4,7 +4,7 @@ using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Implemetation;
 
 namespace Cooperchip.DiretoaoPonto.UoW.Api.Configuration.Extensions
 {
-    public class DIRepositoryConfigurationExtension
+    public static class DIRepositoryConfigurationExtension
     {
         public static IServiceCollection AddDIRepositoryConfiguration(this IServiceCollection services)
         {
