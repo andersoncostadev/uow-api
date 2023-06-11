@@ -3,7 +3,7 @@ using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.V2.Abstraction;
 
 namespace Cooperchip.DiretoAoPonto.Uow.Data.Repositories.V2.Implemetation
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWorkV2
     {
         private readonly UoWDbContext _context;
         public UnitOfWork(UoWDbContext context) => _context = context;
