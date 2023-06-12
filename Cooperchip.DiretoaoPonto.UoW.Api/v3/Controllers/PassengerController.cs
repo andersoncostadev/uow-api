@@ -1,25 +1,28 @@
 ﻿using AutoMapper;
+using Cooperchip.DiretoaoPonto.UoW.Api.Controllers;
 using Cooperchip.DiretoaoPonto.UoW.Api.Models;
 using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Abstraction;
+using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.V2.Abstraction;
 using Cooperchip.DiretoAoPonto.Uow.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
+namespace Cooperchip.DiretoaoPonto.UoW.Api.v3.Controllers
 {
-    [ApiController]
-    [ApiVersion("1.0", Deprecated = true)]
-    [Route("api/v{version:apiVersion}/passenger")]
-    public class PassengerController : Controller
+    [ApiVersion("3.0")]
+    [Route("api/v{version:apiVersion}/passengers")]
+    public class PassengerV2Controller : MainController
     {
+        private readonly IUnitOfWorkV2 _uow;
         private readonly IPassagenrRepository _repoPassagenr;
         private readonly IFlightRepository _repoFlight;
         private readonly IMapper _mapper;
 
-        public PassengerController(IPassagenrRepository repoPassagenr, IFlightRepository repoFlight, IMapper mapper)
+        public PassengerV2Controller(IPassagenrRepository repoPassagenr, IFlightRepository repoFlight, IMapper mapper, IUnitOfWorkV2 uow)
         {
             _repoPassagenr = repoPassagenr;
             _repoFlight = repoFlight;
             _mapper = mapper;
+            _uow = uow;
         }
 
         [HttpPost("add-passenger")]
@@ -41,12 +44,13 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
                 await _repoPassagenr.AddToFlight(passengerModel);
                 await _repoFlight.DecreaseVacancy(passenger.FlightId);
 
-                var transaction = await _repoPassagenr.Commit();
+                var transaction = await _uow.Commit();
 
                 return CreatedAtAction(nameof(AddPassenger), _mapper.Map<PassengerDTO>(passengerModel));
             }
             catch (Exception ex)
             {
+                await _uow.Rollback();
                 return BadRequest(ex.Message);
             }
         }

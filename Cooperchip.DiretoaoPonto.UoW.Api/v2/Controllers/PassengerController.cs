@@ -1,28 +1,24 @@
 ﻿using AutoMapper;
 using Cooperchip.DiretoaoPonto.UoW.Api.Models;
 using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Abstraction;
-using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.V2.Abstraction;
 using Cooperchip.DiretoAoPonto.Uow.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
+namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers.v2.Controllers
 {
-    [ApiController]
-    [ApiVersion("1.0", Deprecated = true)]
-    [Route("api/v{version:apiVersion}/passenger-V2")]
-    public class PassengerV2Controller : ControllerBase
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/passengers")]
+    public class PassengerController : MainController
     {
-        private readonly IUnitOfWorkV2 _uow;
         private readonly IPassagenrRepository _repoPassagenr;
         private readonly IFlightRepository _repoFlight;
         private readonly IMapper _mapper;
 
-        public PassengerV2Controller(IPassagenrRepository repoPassagenr, IFlightRepository repoFlight, IMapper mapper, IUnitOfWorkV2 uow)
+        public PassengerController(IPassagenrRepository repoPassagenr, IFlightRepository repoFlight, IMapper mapper)
         {
             _repoPassagenr = repoPassagenr;
             _repoFlight = repoFlight;
             _mapper = mapper;
-            _uow = uow;
         }
 
         [HttpPost("add-passenger")]
@@ -44,13 +40,12 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
                 await _repoPassagenr.AddToFlight(passengerModel);
                 await _repoFlight.DecreaseVacancy(passenger.FlightId);
 
-                var transaction = await _uow.Commit();
+                var transaction = await _repoPassagenr.Commit();
 
                 return CreatedAtAction(nameof(AddPassenger), _mapper.Map<PassengerDTO>(passengerModel));
             }
             catch (Exception ex)
             {
-                await _uow.Rollback();
                 return BadRequest(ex.Message);
             }
         }

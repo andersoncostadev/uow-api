@@ -1,29 +1,24 @@
 ﻿using AutoMapper;
-using Cooperchip.DiretoaoPonto.UoW.Api.Configuration.Settings;
 using Cooperchip.DiretoaoPonto.UoW.Api.Models;
 using Cooperchip.DiretoAoPonto.Uow.Data.Repositories.Abstraction;
 using Cooperchip.DiretoAoPonto.Uow.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
-namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
+namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers.v3.Controllers
 {
-    [ApiController]
-    [ApiVersion("1.0", Deprecated = true)]
-    [Route("api/v{version:apiVersion}/flight")]
-    public class FlightController : Controller
+    [ApiVersion("3.0")]
+    [Route("api/v{version:apiVersion}/flights")]
+    public class FlightController : MainController
     {
-        private readonly FlightSettings _settings;
         private readonly IFlightRepository _repoFlight;
         private readonly IPassagenrRepository _repoPassagenr;
         private readonly IMapper _mapper;
 
-        public FlightController(IFlightRepository repoFlight, IPassagenrRepository repoPassagenr, IMapper mapper, IOptions<FlightSettings> settings)
+        public FlightController(IFlightRepository repoFlight, IPassagenrRepository repoPassagenr, IMapper mapper)
         {
             _repoFlight = repoFlight;
             _repoPassagenr = repoPassagenr;
             _mapper = mapper;
-            _settings = settings.Value;
         }
 
         [HttpGet("get-flights")]
@@ -66,7 +61,7 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
             return Ok(flight);
         }
 
-        [HttpPost("add-flight")]
+        [HttpPost("create-flight")]
         [ProducesResponseType(typeof(Flight), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddFlight([FromBody] FlightDTO flight)
@@ -74,43 +69,13 @@ namespace Cooperchip.DiretoaoPonto.UoW.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("The model is invalid");
 
-            flight.Id = _settings.Id;
+            flight.Id = Guid.Parse("a40d5298-bfa0-4e06-8fab-80856d4a1db5");
 
             try
             {
                 await _repoFlight.Create(_mapper.Map<Flight>(flight));
                 var transaction = await _repoFlight.Commit();
                 return CreatedAtAction(nameof(AddFlight), flight);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("add-flight-appsettings")]
-        [ProducesResponseType(typeof(Flight), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddFlightAppSettings()
-        {
-            if (!ModelState.IsValid)
-                return BadRequest("The model is invalid");
-
-            var flight = new Flight()
-            {
-                Id = _settings.Id,
-                Capacity = _settings.Capacity,
-                Availability = _settings.Availability,
-                Code = _settings.Code,
-                RoadMap = _settings.RoadMap,
-                Passengers = new List<Passenger>()
-            };
-
-            try
-            {
-                await _repoFlight.Create(flight);
-                var transaction = await _repoFlight.Commit();
-                return CreatedAtAction(nameof(AddFlightAppSettings), flight);
             }
             catch (Exception ex)
             {
